@@ -6,11 +6,11 @@ import psl.util._
 import psl.language._
 
 @main def hello: Unit =
-  val code: String =
-    """print(1);"""
-  val ast = psl.Program(code)
-  val cppAst = Transpiler.transpile(ast)
+  val code = scala.io.Source.fromFile("main.psl").mkString.trim()
+  val ast = psl.RootDecl(code)
+  val cppAst = Transpiler.run(ast)
 
-  val stringifier = cpp.Stringifier()
-  import stringifier.given
-  println(stringify(cppAst))
+  import cpp.Stringifier.given
+  val pr = getPrintWriter("out.cpp")
+  pr.println(stringify(cppAst))
+  pr.close()
