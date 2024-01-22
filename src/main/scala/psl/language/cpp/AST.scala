@@ -1,15 +1,17 @@
 package psl.language.cpp
 
-case class Program(stmts: List[Stmt])
+sealed trait Elem
 
-enum Preproc:
+case class Program(preStmts: List[Preproc], stmts: List[Stmt]) extends Elem
+
+enum Preproc extends Elem:
   case ImportPreproc(path: String)
 
-enum Expr:
+enum Expr extends Elem:
   case IdExpr(name: String)
   case BinaryOperator(left: Expr, right: Expr, op: String)
   case IntegerLiteral(value: String)
 
-enum Stmt:
+enum Stmt extends Elem:
   case ExprStmt(e: Expr)
   case ReturnStmt(e: Expr)

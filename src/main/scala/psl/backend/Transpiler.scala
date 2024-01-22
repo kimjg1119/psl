@@ -11,6 +11,7 @@ object Transpiler {
       cpp.Preproc.ImportPreproc("bits/stdc++.h")
     )
     cpp.Program(
+      importStmts,
       ast.stmts.map(transpile)
     )
 
