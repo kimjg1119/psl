@@ -19,3 +19,10 @@ sealed trait Expr extends Stmt
 case class IntegerLiteral(val value: Int) extends Expr
 case class StringLiteral(val value: String) extends Expr
 case class Println(val expr: Expr) extends Expr
+case class Scan(val id: List[String]) extends Expr
+case class DeclRefExpr(val id: String) extends Expr
+case class BinaryOperator (
+  val lhs: Expr,
+  val rhs: Expr,
+  val op: String
+) extends Expr

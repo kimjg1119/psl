@@ -3,7 +3,7 @@ package psl.frontend
 import scala.util.parsing.combinator.PackratParsers
 import scala.util.parsing.combinator.RegexParsers
 
-val debugParsingFlag: Boolean = false
+val debugParsingFlag: Boolean = true
 
 trait DebugableParser extends RegexParsers with PackratParsers {
 

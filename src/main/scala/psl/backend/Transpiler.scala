@@ -47,6 +47,9 @@ object Transpiler {
     expr match
       case psl.IntegerLiteral(value) => IntegerLiteral(value)
       case psl.StringLiteral(value)  => StringLiteral(value)
+      case psl.DeclRefExpr(id)       => DeclRefExpr(id)
+      case psl.BinaryOperator(lhs, rhs, op) =>
+        BinaryOperator(transpile(lhs), transpile(rhs), op)
       case psl.Println(expr) =>
         CXXOperatorCallExpr(
           CXXOperatorCallExpr(
@@ -57,6 +60,17 @@ object Transpiler {
           StringLiteral("\\n"),
           "<<"
         )
+      case psl.Scan(id) =>
+        val args = id.map(id => DeclRefExpr(id))
+        val init = CXXOperatorCallExpr(
+          DeclRefExpr("std::cin"),
+          args.head,
+          ">>"
+        )
+        val body = args.tail.foldLeft(init) { (acc, arg) =>
+          CXXOperatorCallExpr(acc, arg, ">>")
+        }
+        body
 
   def transpile(ty: psl.QualType): QualType =
     val psl.QualType(t, isConst) = ty
